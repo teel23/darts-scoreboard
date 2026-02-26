@@ -50,3 +50,38 @@ A mobile-first darts scoring PWA. Supports four game modes: 01 Games (301/501/70
 - [ ] Player name persistence
 - [ ] Match history and stats
 - [ ] Optional sound effects
+
+---
+
+## Future Feature Plan — Connectivity + Stats
+
+### Auth
+- Magic link via email (Supabase Auth)
+- No passwords — works seamlessly across all devices
+
+### Groups
+- Create a group, invite friends via code or link
+- Small scale — personal friend groups only
+
+### Stats
+- Per-player stats: games played, win %, favourite mode
+- Head-to-head records between friends
+- Game history with date, mode, players, winner
+- Stats persist and sync cross-device via Supabase
+
+### Admin / Commissioner Mode (Carson only)
+- `is_admin` flag on users table
+- Private dashboard showing all flagged games
+- Ability to edit individual scores or delete games
+- Soft delete only — data never permanently lost
+- Flagged games show ⚠️ in group stats until reviewed
+
+### Data Model (Supabase)
+| Table | Key Columns |
+|---|---|
+| `users` | id, username, email, is_admin |
+| `groups` | id, name, created_by, invite_code |
+| `group_members` | group_id, user_id, joined_at |
+| `games` | id, group_id, mode, played_at, is_flagged, flag_reason, deleted |
+| `game_players` | game_id, user_id, final_score, rank, won |
+| `game_events` | game_id, round, player_id, dart data |

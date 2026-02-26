@@ -144,9 +144,20 @@ export default function CricketBoard({ state, onSubmitTurn, onUndo }) {
       <div className="felt-panel" style={{ borderRadius: 14, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontSize: 10, color: 'var(--felt-muted)', textTransform: 'uppercase', letterSpacing: 2, fontWeight: 700 }}>Now Throwing</div>
-          <div style={{ fontSize: 22, fontWeight: 900, lineHeight: 1.1, color: 'var(--felt-text)', letterSpacing: 0.5 }}>
+          <div key={pi} className="turn-start" style={{ fontSize: 22, fontWeight: 900, lineHeight: 1.1, color: 'var(--felt-text)', letterSpacing: 0.5 }}>
             {state.players[pi].name}
           </div>
+          {feedbackLines.length > 0 && (
+            <div className="slide-in" style={{
+              fontSize: 11, fontWeight: 700, marginTop: 2,
+              color: feedbackLines[feedbackLines.length - 1].includes('CLOSED') ? '#4ade80'
+                   : feedbackLines[feedbackLines.length - 1].includes('pts') ? '#fbbf24'
+                   : feedbackLines[feedbackLines.length - 1].includes('Miss') ? '#f87171'
+                   : 'var(--felt-muted)',
+            }}>
+              {feedbackLines[feedbackLines.length - 1]}
+            </div>
+          )}
         </div>
         {/* Dart slots — compact squares */}
         <div style={{ display: 'flex', gap: 5 }}>
@@ -172,24 +183,6 @@ export default function CricketBoard({ state, onSubmitTurn, onUndo }) {
           })}
         </div>
       </div>
-
-      {/* ── Feedback log ── */}
-      {feedbackLines.length > 0 && (
-        <div className="felt-panel" style={{ borderRadius: 10, padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-          {feedbackLines.map((line, i) => (
-            <div key={i} className="slide-in" style={{
-              fontSize: 13, fontWeight: 700,
-              color: line.includes('CLOSED') ? '#4ade80'
-                   : line.includes('pts') ? '#fbbf24'
-                   : line.includes('Miss') ? '#f87171'
-                   : 'var(--felt-text)',
-              textShadow: line.includes('CLOSED') ? '0 0 8px #4ade80' : line.includes('pts') ? '0 0 8px #fbbf24' : 'none',
-            }}>
-              {line}
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* ── Dartboard ── */}
       <div style={{ flexShrink: 1, minHeight: 0, display: 'flex', justifyContent: 'center' }}>
@@ -270,6 +263,7 @@ export default function CricketBoard({ state, onSubmitTurn, onUndo }) {
 
               {/* Number button */}
               <button
+                className="num-btn"
                 onClick={() => { if (dartsUsed < 3) setSelectedNum(num); }}
                 disabled={dartsUsed >= 3}
                 style={{
@@ -305,7 +299,7 @@ export default function CricketBoard({ state, onSubmitTurn, onUndo }) {
         }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 11, color: 'var(--felt-muted)', fontWeight: 700, letterSpacing: 1 }}>PTS</div>
-            <div className={pi === 0 ? 'led-accent' : ''} style={{ fontSize: 22, fontWeight: 900, color: pi === 0 ? undefined : 'var(--felt-text)' }}>
+            <div key={pi === 0 ? getPlayerPoints(0) : 'pts-0'} className={`${pi === 0 ? 'led-accent ' : ''}score-flash`} style={{ fontSize: 22, fontWeight: 900, color: pi === 0 ? undefined : 'var(--felt-text)' }}>
               {getPlayerPoints(0)}
             </div>
           </div>
@@ -313,7 +307,7 @@ export default function CricketBoard({ state, onSubmitTurn, onUndo }) {
           <div style={{ textAlign: 'center' }}>
             {state.players[1] && <>
               <div style={{ fontSize: 11, color: 'var(--felt-muted)', fontWeight: 700, letterSpacing: 1 }}>PTS</div>
-              <div className={pi === 1 ? 'led-accent' : ''} style={{ fontSize: 22, fontWeight: 900, color: pi === 1 ? undefined : 'var(--felt-text)' }}>
+              <div key={pi === 1 ? getPlayerPoints(1) : 'pts-1'} className={`${pi === 1 ? 'led-accent ' : ''}score-flash`} style={{ fontSize: 22, fontWeight: 900, color: pi === 1 ? undefined : 'var(--felt-text)' }}>
                 {getPlayerPoints(1)}
               </div>
             </>}

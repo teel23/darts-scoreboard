@@ -112,8 +112,8 @@ export default function X01Board({ state, onScore, onUndo, onNextPlayer }) {
           const showPreview = i === pi && darts.length > 0;
           return (
             <div key={i} style={{ background: i === pi ? 'rgba(59,130,246,0.15)' : 'var(--bg2)', border: `2px solid ${i === pi ? 'var(--blue)' : 'var(--border)'}`, borderRadius: 12, padding: '8px 6px', textAlign: 'center' }}>
-              <div style={{ fontSize: 10, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
-              <div style={{ fontSize: 28, fontWeight: 900, lineHeight: 1.1, color: showPreview ? (isBust ? 'var(--danger)' : 'var(--blue)') : (i === pi ? 'var(--blue)' : 'var(--text)') }}>
+              <div key={i === pi ? 'active' : 'inactive'} className={i === pi ? 'turn-start' : ''} style={{ fontSize: 10, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
+              <div key={i === pi ? darts.length : p.score} className="score-flash" style={{ fontSize: 28, fontWeight: 900, lineHeight: 1.1, color: showPreview ? (isBust ? 'var(--danger)' : 'var(--blue)') : (i === pi ? 'var(--blue)' : 'var(--text)') }}>
                 {showPreview ? Math.max(0, preview) : p.score}
               </div>
               {showPreview && (
@@ -181,7 +181,7 @@ export default function X01Board({ state, onScore, onUndo, onNextPlayer }) {
         {/* Number grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 8 }}>
           {NUMBERS.map(n => (
-            <button key={n} onClick={() => { if (dartsLeft > 0 && !submittedRef.current) setSelectedNum(n); }}
+            <button key={n} className="num-btn" onClick={() => { if (dartsLeft > 0 && !submittedRef.current) setSelectedNum(n); }}
               disabled={dartsLeft === 0}
               style={{ padding: '11px 2px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontSize: 13, fontWeight: 700, cursor: dartsLeft > 0 ? 'pointer' : 'not-allowed', opacity: dartsLeft === 0 ? 0.4 : 1 }}>
               {n}

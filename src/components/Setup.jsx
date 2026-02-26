@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MODE_LABELS = { x01: '01 Games', cricket: 'Cricket', tictactoe: 'Tic Tac Toe', aroundclock: 'Around the Clock', golf: 'Golf', bermuda: 'Bermuda' };
 const MAX_PLAYERS = { x01: 8, cricket: 4, tictactoe: 2, aroundclock: 8, golf: 8, bermuda: 8 };
@@ -13,9 +13,16 @@ export default function Setup({ config, onStart, onBack }) {
   const mode = config.mode;
   const maxP = MAX_PLAYERS[mode];
 
-  const [players, setPlayers] = useState(['', '']);
+  const [players, setPlayers] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('darts_players')) || ['', '']; }
+    catch { return ['', '']; }
+  });
   const [x01Variant, setX01Variant] = useState(501);
   const [finishRule, setFinishRule] = useState('straight');
+
+  useEffect(() => {
+    localStorage.setItem('darts_players', JSON.stringify(players));
+  }, [players]);
 
   const addPlayer = () => { if (players.length < maxP) setPlayers([...players, '']); };
   const removePlayer = (i) => { if (players.length > 1) setPlayers(players.filter((_, idx) => idx !== i)); };
