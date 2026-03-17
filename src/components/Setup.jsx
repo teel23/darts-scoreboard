@@ -36,7 +36,7 @@ export default function Setup({ config, onStart, onBack }) {
   };
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', padding: '12px 16px 16px', maxWidth: 480, margin: '0 auto', overflow: 'hidden' }} className="fade-in">
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', padding: 'max(12px, env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom, 0px))', maxWidth: 480, margin: '0 auto', overflow: 'hidden' }} className="fade-in">
       <button onClick={onBack} style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 15, marginBottom: 12, alignSelf: 'flex-start', padding: 0 }}>
         ← Back
       </button>
@@ -80,7 +80,7 @@ export default function Setup({ config, onStart, onBack }) {
                 onChange={e => updatePlayer(i, e.target.value)}
                 placeholder={`Player ${i + 1}`}
                 maxLength={16}
-                style={{ flex: 1, padding: '12px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--text)', fontSize: 15, outline: 'none' }}
+                style={{ flex: 1, padding: '14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--text)', fontSize: 16, outline: 'none', minHeight: 52 }}
               />
               {players.length > 1 && (
                 <button onClick={() => removePlayer(i)} style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--muted)', borderRadius: 8, width: 38, height: 38, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
